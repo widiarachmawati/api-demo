@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  demo-api:
+    build:
+      context: .
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/simple_api
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    volumes:
+      - gradle-cache-demoapi:/home/gradle/.gradle
+  db:
+    image: postgres
+    container_name: demo-db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: simple_api
+
+volumes:
+  gradle-cache-demoapi:
+    name: gradle-cache-demoapi
